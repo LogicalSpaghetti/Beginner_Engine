@@ -1,7 +1,6 @@
 package GeneralLogic;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,5 +23,12 @@ public class BlockManager {
         };
     }
 
-    // Other methods to interact with the blocks list
+    public static Color getLigherColor(String category) {
+        return switch (category) {
+            case "Motion" -> Color.blue;
+            case "Looks" -> Color.magenta;
+            case "Control" -> Color.yellow;
+            default -> Color.white;
+        };
+    }
 }
