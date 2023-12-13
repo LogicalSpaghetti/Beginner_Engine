@@ -14,8 +14,8 @@ public class BlockManager {
             new BlockType("BlockType 6", "Control")
     );
 
-    public static Color getColor(String category) {
-        return switch (category) {
+    public static Color getColor(BlockType type) {
+        return switch (type.category()) {
             case "Motion" -> Color.blue;
             case "Looks" -> Color.magenta;
             case "Control" -> Color.yellow;
@@ -23,11 +23,11 @@ public class BlockManager {
         };
     }
 
-    public static Color getLigherColor(String category) {
-        return switch (category) {
-            case "Motion" -> Color.blue;
-            case "Looks" -> Color.magenta;
-            case "Control" -> Color.yellow;
+    public static Color getLighterColor(BlockType type) {
+        return switch (type.category()) {
+            case "Motion" -> new Color(50, 100, 255);
+            case "Looks" -> new Color(255, 100, 255);
+            case "Control" -> new Color(255, 255, 100);
             default -> Color.white;
         };
     }

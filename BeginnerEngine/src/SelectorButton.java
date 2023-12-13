@@ -15,7 +15,7 @@ public class SelectorButton extends JButton implements MouseListener {
         this.centerPanel = centerPanel;
         this.type = type;
 
-        setBackground(BlockManager.getColor(type.category()));
+        setBackground(BlockManager.getColor(type));
         initializeTextField();
 
         addMouseListener(this);
@@ -30,8 +30,6 @@ public class SelectorButton extends JButton implements MouseListener {
         label.setFocusable(false);
         label.setText(type.name());
         add(label);
-
-        System.out.println(label);
     }
 
     @Override

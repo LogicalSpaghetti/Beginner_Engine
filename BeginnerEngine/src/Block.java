@@ -2,7 +2,6 @@ import GeneralLogic.BlockManager;
 import GeneralLogic.BlockType;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -15,13 +14,16 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
     JLabel label = new JLabel();
     CenterPanel centerPanel;
 
+    Block parent;
+    Block child;
+
     public Block(BlockType type, CenterPanel centerPanel) {
         this.type = type;
         this.centerPanel = centerPanel;
         initializeTextField();
 
         setSize(100, 100);
-        setBackground(BlockManager.getColor(type.category()));
+        setBackground(BlockManager.getColor(type));
 
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -36,9 +38,7 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
         label.setText(type.name());
         label.setVerticalAlignment(SwingConstants.TOP);
         add(label);
-        label.setLocation(10,0);
-
-        System.out.println(label);
+        label.setLocation(10, 0);
     }
 
     private void trySnap() {
@@ -71,11 +71,28 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
 
             if (topCheck.contains(bottomOfCurrent)) {
                 setLocation(bottomOfCurrent);
+                parent = currentBlock;
+                if (parent.child != null) {
+                    parent.child.parent = null;
+                }
+                parent.child = this;
                 break;
             } else if (bottomCheck.contains(topOfCurrent)) {
                 setLocation((int) topOfCurrent.getX(), (int) (topOfCurrent.getY() - getHeight()));
+                child = currentBlock;
+                if (child.parent != null) {
+                    child.parent.child = null;
+                }
+                child.parent = this;
                 break;
             }
+        }
+    }
+
+    private void moveChild(Block child, Point p, int i) {
+        child.setLocation((int) p.getX(), (int) (p.getY() + i));
+        if (child.child != null) {
+            moveChild(child.child, child.getLocation(), child.getHeight());
         }
     }
 
@@ -98,20 +115,27 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        setBackground();
+        setBackground(BlockManager.getLighterColor(type));
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        setBackground(BlockManager.getColor(type));
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        if (parent != null) {
+            parent.child = null;
+            parent = null;
+        }
         if (initialClick != null && initialLocation != null) {
             int x = (int) (getLocation().x + e.getX() - initialClick.getX() + initialLocation.getX());
             int y = (int) (getLocation().y + e.getY() - initialClick.getY() + initialLocation.getY());
             setLocation(x, y);
+        }
+        if (child != null) {
+            moveChild(child, this.getLocation(), this.getHeight());
         }
     }
 
