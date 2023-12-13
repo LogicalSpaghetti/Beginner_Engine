@@ -41,6 +41,7 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
         label.setLocation(10, 0);
     }
 
+    // todo: this method is a mess, clean it up so it isn't so damn long
     private void trySnap() {
         // when released, look for the nearest block within range and snap to it
         int snapBoundsHeight = 60;
@@ -66,6 +67,9 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
 
         for (int i = 0; i < centerPanel.blocks.size(); i++) {
             Block currentBlock = centerPanel.blocks.get(i);
+            if (currentBlock == this.child) {
+                continue;
+            }
             Point bottomOfCurrent = new Point(currentBlock.getX(), currentBlock.getY() + currentBlock.getHeight());
             Point topOfCurrent = currentBlock.getLocation();
 
@@ -79,11 +83,11 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
                 break;
             } else if (bottomCheck.contains(topOfCurrent)) {
                 setLocation((int) topOfCurrent.getX(), (int) (topOfCurrent.getY() - getHeight()));
-                child = currentBlock;
+                this.child = currentBlock;
                 if (child.parent != null) {
                     child.parent.child = null;
                 }
-                child.parent = this;
+                this.child.parent = this;
                 break;
             }
         }
