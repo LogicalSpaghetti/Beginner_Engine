@@ -10,9 +10,6 @@ import java.util.ArrayList;
 // allows users to easily drag and drop blocks into the code area
 public class CenterPanel extends JPanel implements MouseListener {
 
-    // todo: replace this with an ArrayList of ArrayLists and have each of those contain a stack of blocks
-    //  instead of using the parent-child system,
-    //  then they can be referenced with a pointer to a different block stack
     public ArrayList<Block> blocks = new ArrayList<>();
     JPanel selector = new JPanel();
 
@@ -33,7 +30,7 @@ public class CenterPanel extends JPanel implements MouseListener {
     public static void newBlock(CenterPanel cp, BlockType type, Point loc) {
         cp.blocks.add(new Block(type, cp));
 
-        Block block = cp.blocks.get(cp.blocks.size() - 1);
+        Block block = cp.blocks.getLast();
 
         cp.add(block);
         loc = new Point(loc.x - cp.getLocationOnScreen().x - 10, loc.y - cp.getLocationOnScreen().y - 10);

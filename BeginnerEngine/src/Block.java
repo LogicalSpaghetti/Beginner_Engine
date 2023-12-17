@@ -5,42 +5,75 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-// a draggable segment of code that stacks with other blocks to form classes
+// a draggable segment of code that links with other blocks
 public class Block extends JPanel implements MouseListener, MouseMotionListener {
+
+    CenterPanel centerPanel;
 
     Point initialLocation;
     Point initialClick;
+
     BlockType type;
-    JLabel label = new JLabel();
-    CenterPanel centerPanel;
+
+    JPanel topBar = new JPanel();
+    InputPanel inputPanel = new InputPanel();
+    OutputPanel outputPanel = new OutputPanel();
 
     public Block(BlockType type, CenterPanel centerPanel) {
         this.type = type;
         this.centerPanel = centerPanel;
-        initializeTextField();
 
-        setSize(100, 100);
+        setLayout(new BorderLayout());
+
+        initializeSubPanels();
+        sizeBlock();
+
         setBackground(BlockManager.getColor(type));
-
         addMouseListener(this);
         addMouseMotionListener(this);
         setFocusable(true);
     }
 
-    private void initializeTextField() {
-        label.setPreferredSize(new Dimension(100, 100));
-        label.setOpaque(false);
-        label.setBorder(null);
-        label.setVisible(true);
-        label.setText(type.name());
-        label.setVerticalAlignment(SwingConstants.TOP);
-        add(label);
-        label.setLocation(10, 0);
+    private void initializeSubPanels() {
+        topBar.setBackground(Color.LIGHT_GRAY);
+        inputPanel.setBackground(Color.CYAN);
+        outputPanel.setBackground(Color.PINK);
+
+        sizeTopBar();
+        sizeInput();
+        sizeOutput();
+
+        add(topBar, BorderLayout.NORTH);
+        add(inputPanel, BorderLayout.WEST);
+        add(outputPanel, BorderLayout.EAST);
+    }
+
+    private void sizeTopBar() {
+        topBar.setPreferredSize(new Dimension(12, 20));
+        // width = nameTextField.width
+    }
+
+    private void sizeInput() {
+        inputPanel.setPreferredSize(new Dimension(40,200));
+        // height = numInputs * 20
+    }
+    private void sizeOutput() {
+        outputPanel.setPreferredSize(new Dimension(60,100));
+        // height = numOutputs * 20
+    }
+
+    private void sizeBlock() {
+        Dimension topDim = topBar.getPreferredSize();
+        Dimension inDim = inputPanel.getPreferredSize();
+        Dimension outDim = outputPanel.getPreferredSize();
+
+        int x = Math.max(topDim.width, (inDim.width + outDim.width));
+        int y = (topDim.height + Math.max(inDim.height, outDim.height));
+        setSize(x, y);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
@@ -75,6 +108,49 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
 
     @Override
     public void mouseMoved(MouseEvent e) {
+    }
 
+    private static class ExchangePanel extends JPanel{
+        ExchangePanel() {
+            setOpaque(false);
+            setBorder(null);
+        }
+
+        public static class ExchangeNode extends JPanel {
+            ExchangeNode() {
+
+            }
+        }
+    }
+
+    private static class InputPanel extends ExchangePanel {
+        InputPanel() {
+
+        }
+
+        private static class InputNode extends ExchangeNode {
+
+        }
+    }
+
+    private static class OutputPanel extends ExchangePanel {
+        OutputPanel() {
+
+        }
+
+        private static class OutputNode extends ExchangeNode {
+
+            JTextField textField = new JTextField();
+
+            OutputNode(String outputType) {
+                textField.setText(outputType);
+
+                int width = SwingUtilities.computeStringWidth(textField.getFontMetrics(textField.getFont()), textField.getText()) + 20; // Adding padding
+
+                Dimension preferredSize = getPreferredSize();
+                preferredSize.width = width;
+                setPreferredSize(preferredSize);
+            }
+        }
     }
 }

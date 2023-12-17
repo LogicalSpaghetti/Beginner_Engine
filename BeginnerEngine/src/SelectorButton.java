@@ -24,8 +24,6 @@ public class SelectorButton extends JButton implements MouseListener {
 
     private void initializeTextField() {
         label.setPreferredSize(new Dimension(100, 100));
-        label.setOpaque(false);
-        label.setBorder(null);
         label.setVisible(true);
         label.setFocusable(false);
         label.setText(type.name());
