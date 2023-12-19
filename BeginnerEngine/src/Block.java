@@ -110,35 +110,23 @@ public class Block extends JPanel implements MouseListener, MouseMotionListener 
     public void mouseMoved(MouseEvent e) {
     }
 
-    private static class ExchangePanel extends JPanel{
-        ExchangePanel() {
-            setOpaque(false);
-            setBorder(null);
-        }
 
-        public static class ExchangeNode extends JPanel {
-            ExchangeNode() {
-
-            }
-        }
-    }
-
-    private static class InputPanel extends ExchangePanel {
+    private static class InputPanel extends JPanel {
         InputPanel() {
 
         }
 
-        private static class InputNode extends ExchangeNode {
+        private static class InputNode extends JPanel {
 
         }
     }
 
-    private static class OutputPanel extends ExchangePanel {
+    private static class OutputPanel extends JPanel {
         OutputPanel() {
 
         }
 
-        private static class OutputNode extends ExchangeNode {
+        private static class OutputNode extends JPanel {
 
             JTextField textField = new JTextField();
 
